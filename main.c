@@ -3,22 +3,53 @@
 #include <string.h>
 #include <math.h> 
 
-#define K 11
+#define K 7
 
 typedef struct data{
 	unsigned char r;
 	unsigned char g;
 	unsigned char b;
-	char label[16];
+	unsigned char id;
 }POINT;
+
+typedef struct mayor{
+	float distance;
+	unsigned char id;
+}MAY;
+
+POINT *p;
+MAY *may;
+
+float calculate_distance(POINT *p1, POINT *p2, float *distance){
+	*distance = sqrt( pow((p2->r)-(p1->r),2) + pow((p2->g)-(p1->g), 2) + pow((p2->b)-(p1->b), 2));
+	return *distance;
+}
+
+void predecir(POINT *predict){
+	unsigned char i;
+	unsigned char j; //esto despues va ser necesario enviar como puntero a calculate_distance
+	
+	printf("\nImprimiendo las primeras %d distancias\n", K);
+	
+	for(i=0; i<K; i++){ //Aqui calculamos K distancias, seran las mas cortas por defecto
+		may[i].distance = calculate_distance(p+i, predict, &may[i].distance);
+		may[i].id = p[i].id;
+		printf("%f : %hhu\n", may[i].distance, may[i].id);
+	}
+	
+	//Aqui luego debemos mandar a llamar iterativamente desde k hasta n (siendo n el tamaño de lineas leidas)
+	//Despues, volvemos a calular las distancias, y si encontramos uno menor en may[i], entonces lo remplazamos
+	//por el mas grande del array may[]
+	
+}
 
 int main(int argc, char *argv[]) {
 	
-	POINT *p = calloc(1, sizeof(POINT));
+	p = calloc(1, sizeof(POINT));
+	may = (MAY *) calloc(K, sizeof(MAY));
+	
 	unsigned short i=1,j,k;
 	unsigned char r,g,b;
-	
-	float distancias[K];
 	
 	FILE *data = fopen("final_data_colors.csv", "r");
 	if(data == NULL){
@@ -30,7 +61,7 @@ int main(int argc, char *argv[]) {
 	while(fgets(line, 64, data)){ //this will run until the end of the file is reached.
 		p = (POINT *) realloc((void*) p, sizeof(POINT) * 1 * i);
 		
-        if (sscanf(line, "%hhu,%hhu,%hhu,%15s", &p[i-1].r, &p[i-1].g, &p[i-1].b, p[i-1].label) != 4) {
+        if (sscanf(line, "%hhu,%hhu,%hhu,%hhu", &p[i-1].r, &p[i-1].g, &p[i-1].b, &p[i-1].id) != 4) {
             fprintf(stderr, "ERROR: linea mal formateada: %s\n", line);
             continue;
         }
@@ -40,7 +71,7 @@ int main(int argc, char *argv[]) {
 	printf("\nPude leer exitosamente los datos\n");
 	printf("\nDatos obtenidos:\n");
 	for(j=0; j<i-1; j++){
-		printf("%hhu %hhu %hhu %s\n", (*(p+j)).r, (*(p+j)).g, (*(p+j)).b, (*(p+j)).label);
+		printf("%hhu %hhu %hhu %hhu\n", (*(p+j)).r, (*(p+j)).g, (*(p+j)).b, (*(p+j)).id);
 	}
 	
 	printf("\nIntroduce los valores rgb a predecir: ");
@@ -52,20 +83,12 @@ int main(int argc, char *argv[]) {
 	scanf("%hhu", &b);
 	
 	printf("\nLos valores que quieres buscar son: %hhu, %hhu, %hhu", r, g, b);
-	/*
-	for(j=0; j<10; j++){
-		distancias[j] = calcular_distancia(*(p+j)).r, *(p+j)).g, *(p+j)).b);
-		p_aux[j] = p+j;
-	}
-	
-	for(j=10; j<i-1; j++){
-		for(k=0; k<10; k++){
-			if(distancias[k] > calcular_distancia( (*(p+j)).r, (*(p+j)).g, (*(p+j)).b){
-				
-				break;
-			}
-		}
-	}*/
+
+	POINT predict;
+	predict.r = r;
+	predict.g = g;
+	predict.b = b;
+	predecir(&predict);
 	
 	fclose(data);
     free(line);
