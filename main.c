@@ -19,15 +19,40 @@ typedef struct mayor{
 
 POINT *p;
 MAY *may;
+unsigned char lineas = 0;
+
 
 float calculate_distance(POINT *p1, POINT *p2, float *distance){
 	*distance = sqrt( pow((p2->r)-(p1->r),2) + pow((p2->g)-(p1->g), 2) + pow((p2->b)-(p1->b), 2));
 	return *distance;
 }
 
+void change_boss(MAY *new_boss, unsigned char *j){
+	MAY mayor_item;
+	mayor_item.distance = may[0].distance;
+	mayor_item.id = may[0].id;
+	unsigned char intercambio = 0;
+	for(*j = 0; *j < K; *j = (*j) + 1){
+		if(may[*j].distance < mayor_item.distance){
+			may[*j].distance = mayor_item.distance;
+			may[*j].id = mayor_item.id;
+			intercambio = 1;
+		}
+	}
+	
+	if( !intercambio){
+		may[0].distance = mayor_item.distance;
+		may[0].id = mayor_item.id;
+	}
+	
+	new_boss->distance = mayor_item.distance;
+	new_boss->id = mayor_item.id;
+}
+
 void predecir(POINT *predict){
-	unsigned char i;
-	unsigned char j; //esto despues va ser necesario enviar como puntero a calculate_distance
+	unsigned char i=0,j=0,k=0; //esto despues va ser necesario enviar como puntero a calculate_distance
+	MAY mayor;
+	float distance_item = 0.0;
 	
 	printf("\nImprimiendo las primeras %d distancias\n", K);
 	
@@ -40,6 +65,23 @@ void predecir(POINT *predict){
 	//Aqui luego debemos mandar a llamar iterativamente desde k hasta n (siendo n el tamaño de lineas leidas)
 	//Despues, volvemos a calular las distancias, y si encontramos uno menor en may[i], entonces lo remplazamos
 	//por el mas grande del array may[]
+	
+	for(i=k; i<lineas; i++){
+		for(j=0; j<K; j++){
+			if( may[j].distance > calculate_distance(predict, p+i, &distance_item) ){
+				MAY may_temp;
+				may_temp.distance = distance_item;
+				may_temp.id = p[i].id;
+				change_boss(&may_temp, &k);
+				break;
+			}
+		}
+	}
+	
+	printf("\nEstos son los puntos mas cercanos: ");
+	for(i=0; i<K; i++){
+		printf("%f %hhu\n", may[i].distance, may[i].id);
+	}
 	
 }
 
@@ -63,7 +105,8 @@ int main(int argc, char *argv[]) {
 		
         if (sscanf(line, "%hhu,%hhu,%hhu,%hhu", &p[i-1].r, &p[i-1].g, &p[i-1].b, &p[i-1].id) != 4) {
             fprintf(stderr, "ERROR: linea mal formateada: %s\n", line);
-            continue;
+            lineas++;
+			continue;
         }
         
 		i++;
