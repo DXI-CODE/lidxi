@@ -27,26 +27,22 @@ float calculate_distance(POINT *p1, POINT *p2, float *distance){
 	return *distance;
 }
 
-void change_boss(MAY *new_boss, unsigned int *k){
+void change_boss(MAY *new_boss){
 	MAY mayor_item;
 	mayor_item.distance = may[0].distance;
 	mayor_item.id = may[0].id;
-	unsigned char intercambio = 0;
-	for(*k = 0; *k < K; *k = (*k) + 1){
-		if(may[*k].distance < mayor_item.distance){
-			may[*k].distance = mayor_item.distance;
-			may[*k].id = mayor_item.id;
-			intercambio = 1;
+	unsigned char k = 0;
+	unsigned char may_index = 0;
+
+	for(k = 0; k < K; k = k + 1){
+		if(may[k].distance > mayor_item.distance){
+			may_index = k;
 		}
 	}
 	
-	if( !intercambio){
-		may[0].distance = mayor_item.distance;
-		may[0].id = mayor_item.id;
-	}
-	
-	new_boss->distance = mayor_item.distance;
-	new_boss->id = mayor_item.id;
+	printf("\nEl mayor de la lista es: %f", mayor_item.distance);
+	may[may_index].distance = new_boss->distance;
+	may[may_index].id = new_boss->id;
 }
 
 void predecir(POINT *predict){
@@ -73,15 +69,19 @@ void predecir(POINT *predict){
 									p[i].r, p[i].g, p[i].b, 
 									distance_item							
 		);
+		printf("\nLista de mayores a este momento: ");
 		for(j=0; j<K; j++){
-			if( may[j].distance > distance_item){
+			printf(" : %f", may[j].distance);
+			if( distance_item < may[j].distance){
+				printf("\nEncontre que %f es menor distancia que %f", distance_item, may[j].distance);
 				MAY may_temp;
 				may_temp.distance = distance_item;
 				may_temp.id = p[i].id;
-				change_boss(&may_temp, &k);
+				change_boss(&may_temp);
 				break;
 			}
 		}
+		printf("\n");
 	}
 	
 	printf("\nEstos son los puntos mas cercanos: ");
