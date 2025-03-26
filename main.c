@@ -19,7 +19,7 @@ typedef struct mayor{
 
 POINT *p;
 MAY *may;
-unsigned char lineas = 0;
+unsigned int lineas = 0;
 
 
 float calculate_distance(POINT *p1, POINT *p2, float *distance){
@@ -27,15 +27,15 @@ float calculate_distance(POINT *p1, POINT *p2, float *distance){
 	return *distance;
 }
 
-void change_boss(MAY *new_boss, unsigned char *j){
+void change_boss(MAY *new_boss, unsigned int *k){
 	MAY mayor_item;
 	mayor_item.distance = may[0].distance;
 	mayor_item.id = may[0].id;
 	unsigned char intercambio = 0;
-	for(*j = 0; *j < K; *j = (*j) + 1){
-		if(may[*j].distance < mayor_item.distance){
-			may[*j].distance = mayor_item.distance;
-			may[*j].id = mayor_item.id;
+	for(*k = 0; *k < K; *k = (*k) + 1){
+		if(may[*k].distance < mayor_item.distance){
+			may[*k].distance = mayor_item.distance;
+			may[*k].id = mayor_item.id;
 			intercambio = 1;
 		}
 	}
@@ -50,7 +50,7 @@ void change_boss(MAY *new_boss, unsigned char *j){
 }
 
 void predecir(POINT *predict){
-	unsigned char i=0,j=0,k=0; //esto despues va ser necesario enviar como puntero a calculate_distance
+	unsigned int i=0,j=0,k=0; //esto despues va ser necesario enviar como puntero a calculate_distance
 	MAY mayor;
 	float distance_item = 0.0;
 	
@@ -65,10 +65,16 @@ void predecir(POINT *predict){
 	//Aqui luego debemos mandar a llamar iterativamente desde k hasta n (siendo n el tamaño de lineas leidas)
 	//Despues, volvemos a calular las distancias, y si encontramos uno menor en may[i], entonces lo remplazamos
 	//por el mas grande del array may[]
-	
+	printf("\nImprimiendo distancias... lineas = %d", lineas);
 	for(i=k; i<lineas; i++){
+		calculate_distance(predict, p+i, &distance_item);
+		printf("\nLa distancia entre (%hhu, %hhu, %hhu) y (%hhu, %hhu, %hhu) es de : %f", 
+									predict->r, predict->g, predict->b, 
+									p[i].r, p[i].g, p[i].b, 
+									distance_item							
+		);
 		for(j=0; j<K; j++){
-			if( may[j].distance > calculate_distance(predict, p+i, &distance_item) ){
+			if( may[j].distance > distance_item){
 				MAY may_temp;
 				may_temp.distance = distance_item;
 				may_temp.id = p[i].id;
@@ -105,9 +111,9 @@ int main(int argc, char *argv[]) {
 		
         if (sscanf(line, "%hhu,%hhu,%hhu,%hhu", &p[i-1].r, &p[i-1].g, &p[i-1].b, &p[i-1].id) != 4) {
             fprintf(stderr, "ERROR: linea mal formateada: %s\n", line);
-            lineas++;
 			continue;
         }
+		lineas++;
         
 		i++;
 	}
@@ -116,21 +122,11 @@ int main(int argc, char *argv[]) {
 	for(j=0; j<i-1; j++){
 		printf("%hhu %hhu %hhu %hhu\n", (*(p+j)).r, (*(p+j)).g, (*(p+j)).b, (*(p+j)).id);
 	}
-	
-	printf("\nIntroduce los valores rgb a predecir: ");
-	printf("\nEscribe el valor de r: ");
-	scanf("%hhu", &r);
-	printf("\nEscribe el valor de g: ");
-	scanf("%hhu", &g);
-	printf("\nEscribe el valor de b: ");
-	scanf("%hhu", &b);
-	
-	printf("\nLos valores que quieres buscar son: %hhu, %hhu, %hhu", r, g, b);
 
 	POINT predict;
-	predict.r = r;
-	predict.g = g;
-	predict.b = b;
+	predict.r = 120;
+	predict.g = 190;
+	predict.b = 64;
 	predecir(&predict);
 	
 	fclose(data);
