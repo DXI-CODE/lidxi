@@ -40,7 +40,7 @@ void change_boss(MAY *new_boss){
 		}
 	}
 	
-	printf("\nEl mayor de la lista es: %f", mayor_item.distance);
+	//printf("\nEl mayor de la lista es: %f", mayor_item.distance);
 	may[may_index].distance = new_boss->distance;
 	may[may_index].id = new_boss->id;
 }
@@ -50,30 +50,31 @@ void predecir(POINT *predict){
 	MAY mayor;
 	float distance_item = 0.0;
 	
-	printf("\nImprimiendo las primeras %d distancias\n", K);
+	//printf("\nImprimiendo las primeras %d distancias\n", K);
 	
 	for(i=0; i<K; i++){ //Aqui calculamos K distancias, seran las mas cortas por defecto
 		may[i].distance = calculate_distance(p+i, predict, &may[i].distance);
 		may[i].id = p[i].id;
-		printf("%f : %hhu\n", may[i].distance, may[i].id);
+		//printf("%f : %hhu\n", may[i].distance, may[i].id);
 	}
 	
 	//Aqui luego debemos mandar a llamar iterativamente desde k hasta n (siendo n el tamaño de lineas leidas)
 	//Despues, volvemos a calular las distancias, y si encontramos uno menor en may[i], entonces lo remplazamos
 	//por el mas grande del array may[]
-	printf("\nImprimiendo distancias... lineas = %d", lineas);
+	//printf("\nImprimiendo distancias... lineas = %d", lineas);
 	for(i=k; i<lineas; i++){
 		calculate_distance(predict, p+i, &distance_item);
-		printf("\nLa distancia entre (%hhu, %hhu, %hhu) y (%hhu, %hhu, %hhu) es de : %f", 
+		/*printf("\nLa distancia entre (%hhu, %hhu, %hhu) y (%hhu, %hhu, %hhu) es de : %f", 
 									predict->r, predict->g, predict->b, 
 									p[i].r, p[i].g, p[i].b, 
 									distance_item							
 		);
 		printf("\nLista de mayores a este momento: ");
+		*/
 		for(j=0; j<K; j++){
-			printf(" : %f", may[j].distance);
+			//printf(" : %f", may[j].distance);
 			if( distance_item < may[j].distance){
-				printf("\nEncontre que %f es menor distancia que %f", distance_item, may[j].distance);
+				//printf("\nEncontre que %f es menor distancia que %f", distance_item, may[j].distance);
 				MAY may_temp;
 				may_temp.distance = distance_item;
 				may_temp.id = p[i].id;
@@ -81,10 +82,10 @@ void predecir(POINT *predict){
 				break;
 			}
 		}
-		printf("\n");
+		//printf("\n");
 	}
 	
-	printf("\nEstos son los puntos mas cercanos: ");
+	//printf("\nEstos son los puntos mas cercanos: ");
 	for(i=0; i<K; i++){
 		printf("%f %hhu\n", may[i].distance, may[i].id);
 	}
@@ -110,7 +111,7 @@ int main(int argc, char *argv[]) {
 		p = (POINT *) realloc((void*) p, sizeof(POINT) * 1 * i);
 		
         if (sscanf(line, "%hhu,%hhu,%hhu,%hhu", &p[i-1].r, &p[i-1].g, &p[i-1].b, &p[i-1].id) != 4) {
-            fprintf(stderr, "ERROR: linea mal formateada: %s\n", line);
+            //fprintf(stderr, "ERROR: linea mal formateada: %s\n", line);
 			continue;
         }
 		lineas++;
@@ -118,17 +119,29 @@ int main(int argc, char *argv[]) {
 		i++;
 	}
 	printf("\nPude leer exitosamente los datos\n");
-	printf("\nDatos obtenidos:\n");
+	//printf("\nDatos obtenidos:\n");
+	/*
 	for(j=0; j<i-1; j++){
 		printf("%hhu %hhu %hhu %hhu\n", (*(p+j)).r, (*(p+j)).g, (*(p+j)).b, (*(p+j)).id);
-	}
+	}*/
 
 	POINT predict;
 	predict.r = 120;
 	predict.g = 190;
 	predict.b = 64;
 	predecir(&predict);
-	
+	printf("\n-------\n");
+	predict.r = 90;
+	predict.g = 10;
+	predict.b = 204;
+	printf("\n-------\n");
+	predecir(&predict);
+	predict.r = 2;
+	predict.g = 102;
+	predict.b = 214;
+	printf("\n-------\n");
+	predecir(&predict);
+		
 	fclose(data);
     free(line);
     free(p);
