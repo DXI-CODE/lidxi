@@ -1,0 +1,42 @@
+#include <Arduino.h>
+
+#define SENSOR_PIN0 A0
+#define SENSOR_PIN1 A1
+#define SENSOR_PIN2 A2
+#define SENSOR_PIN3 A3
+#define SENSOR_PIN4 A4
+
+#define CAPTURAR_PIN 2
+
+void setup() {
+    Serial.begin(9600);
+
+    pinMode(SENSOR_PIN0, INPUT);
+    pinMode(SENSOR_PIN1, INPUT);
+    pinMode(SENSOR_PIN2, INPUT);
+    pinMode(SENSOR_PIN3, INPUT);
+    pinMode(SENSOR_PIN4, INPUT);
+    pinMode(CAPTURAR_PIN, INPUT_PULLUP);
+}
+
+void loop() {
+    if (digitalRead(CAPTURAR_PIN) == HIGH) {
+        int s0 = analogRead(SENSOR_PIN0);
+        int s1 = analogRead(SENSOR_PIN1);
+        int s2 = analogRead(SENSOR_PIN2);
+        int s3 = analogRead(SENSOR_PIN3);
+        int s4 = analogRead(SENSOR_PIN4);
+
+        Serial.print(s0);
+        Serial.print(",");
+        Serial.print(s1);
+        Serial.print(",");
+        Serial.print(s2);
+        Serial.print(",");
+        Serial.print(s3);
+        Serial.print(",");
+        Serial.println(s4); 
+
+        delay(1); 
+    }
+}
