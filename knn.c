@@ -50,9 +50,13 @@ void change_boss(MAY *new_boss){
   may[may_index].id = new_boss->id;
 }
 
-void short_array(JEF *jef, int n) {
-    unsigned int i,j;
+void short_array(JEF *jef, unsigned int n) {
+    if (jef == NULL || n <= 1)
+        return;
+
+    int i = 0, j = 0;
     JEF temp;
+    temp.cont = 0;
 
     for (i = 1; i < n; i++) {
         temp = jef[i];
@@ -78,7 +82,9 @@ void sum_elem_array(JEF *jef_i, unsigned char id_candidato){
 
 short is_in_array(JEF *jef, unsigned char id, unsigned int arr_size){
     unsigned char i = 0;
-    for(i=0; i<arr_size; i++){
+    if(jef == NULL || arr_size == 0) return -1;
+
+    for(i=0; i < arr_size; i++){
         if(jef[i].id == id)
             return i;
     }
@@ -97,9 +103,10 @@ JEF get_boss(){
     short pos = 0;
     unsigned char i;
     JEF *jef = NULL; //conjunto de jefes
-    JEF boss; //el mero chaka
+    JEF boss;
+    boss.cont = 0;//el mero chaka
 
-    for(i=0; i<K; i++){
+    for(i=0; i < K; i++){
         pos = is_in_array(jef, may[i].id, cont_jc);
         if(pos == -1){ //No esta en el array
             if (jef == NULL) {
@@ -114,10 +121,15 @@ JEF get_boss(){
             sum_elem_array(&jef[pos], may[i].id);
         }
     }
+
     short_array(jef, cont_jc);
-    boss.cont = jef[0].cont;
-    boss.id = jef[0].id;
-    free(jef);
+
+    if(jef != NULL){
+        boss.cont = jef[0].cont;
+        boss.id = jef[0].id;
+        free(jef);
+        jef = NULL;
+    }
     return boss;
 }
 
@@ -156,7 +168,13 @@ void predecir(POINT *predict){
   }
 
   JEF jefe_final = get_boss();
-  printf("%u votos ||  id: %hhu\n", jefe_final.cont, jefe_final.id);
+  if(jefe_final.cont != 0){
+    printf("%u votos ||  id: %i\n", jefe_final.cont, jefe_final.id);
+  }
+  else{
+      printf("\nNo se pudo determinar la prediccion");
+  }
+
 }
 
 int main(int argc, char *argv[]) {
