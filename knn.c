@@ -3,7 +3,7 @@
 #include <strings.h>
 #include <unistd.h>
 
-#define K 7
+#define K 5
 #define N 3
 
 typedef struct data{
@@ -22,7 +22,7 @@ typedef struct jefes{
 }JEF;
 
 POINT *p; //Conjunto de puntos (dataset)
-MAY *may; //Conjunto de menores distancias
+MAY may[K]; //Conjunto de menores distancias
 
 unsigned int lineas = 0;
 
@@ -50,32 +50,13 @@ void change_boss(MAY *new_boss){
   may[may_index].id = new_boss->id;
 }
 
-void short_array(JEF *jef, unsigned int n) {
-    if (jef == NULL || n <= 1)
-        return;
-
-    int i = 0, j = 0;
-    JEF temp;
-    temp.cont = 0;
-
-    for (i = 1; i < n; i++) {
-        temp = jef[i];
-        j = i - 1;
-        while (j >= 0 && jef[j].cont > temp.cont) {
-            jef[j + 1] = jef[j];
-            j--;
-        }
-        jef[j + 1] = temp;
-    }
-}
-
 void put_in_array(JEF *jef_i, unsigned char id_candidato){
-    jef_i->cont = 0;
+    jef_i->cont = 1;
     jef_i->id = id_candidato;
 }
 
 void sum_elem_array(JEF *jef_i, unsigned char id_candidato){
-    jef_i->cont++;
+    jef_i->cont = jef_i->cont + 1;
     jef_i->id = id_candidato;
 }
 
@@ -91,6 +72,67 @@ short is_in_array(JEF *jef, unsigned char id, unsigned int arr_size){
     return -1;
 }
 
+void printf_arr(){
+    int i;
+    printf("\nmay: ");
+    for(i=0; i < K; i++){
+        printf("(dist: %d : id: %d), ", may[i].distance, may[i].id);
+    }
+    printf("\n");
+}
+
+void printf_boss(JEF *jef, unsigned int tam){
+    int i;
+    printf("\nboss: ");
+    for(i=0; i < tam; i++){
+        printf("(cont: %u : id: %hhu), ", jef[i].cont, jef[i].id);
+    }
+    printf("\n");
+}
+
+void merge(JEF *arr, int left, int mid, int right) {
+    int i, j, k;
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    JEF *L = (JEF *) malloc(n1 * sizeof(JEF));
+    JEF *R = (JEF *) malloc(n2 * sizeof(JEF));
+
+    if (L == NULL || R == NULL) return;
+
+    for (i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+
+    i = 0; j = 0; k = left;
+
+    // Orden descendente: mayor a menor
+    while (i < n1 && j < n2) {
+        if (L[i].cont >= R[j].cont) {
+            arr[k++] = L[i++];
+        } else {
+            arr[k++] = R[j++];
+        }
+    }
+
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+
+    free(L);
+    free(R);
+}
+
+void merge_sort(JEF *arr, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        merge_sort(arr, left, mid);
+        merge_sort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+
+
 JEF get_boss(){
     /*Esta es la función RH ya que todos querrán ser el candidato
     numero 1 para ser el jefe pero solo uno podrá ser el verdadero
@@ -102,18 +144,16 @@ JEF get_boss(){
     unsigned int cont_jc = 0;
     short pos = 0;
     unsigned char i;
-    JEF *jef = NULL; //conjunto de jefes
+    JEF jef[K]; //conjunto de jefes
     JEF boss;
     boss.cont = 0;//el mero chaka
+    boss.id = 0;
+
+    printf_arr();
 
     for(i=0; i < K; i++){
         pos = is_in_array(jef, may[i].id, cont_jc);
         if(pos == -1){ //No esta en el array
-            if (jef == NULL) {
-                jef = (JEF *) calloc(cont_jc+1, sizeof(JEF));
-            } else {
-                jef = (JEF *) realloc(jef, (cont_jc+1) * sizeof(JEF));
-            }
             put_in_array(&jef[cont_jc], may[i].id);
             cont_jc++;
         }
@@ -122,14 +162,11 @@ JEF get_boss(){
         }
     }
 
-    short_array(jef, cont_jc);
+    printf_boss(jef, cont_jc);
+    merge_sort(jef, 0, cont_jc - 1);
 
-    if(jef != NULL){
-        boss.cont = jef[0].cont;
-        boss.id = jef[0].id;
-        free(jef);
-        jef = NULL;
-    }
+    boss.cont = jef[0].cont;
+    boss.id = jef[0].id;
     return boss;
 }
 
@@ -162,24 +199,23 @@ void predecir(POINT *predict){
     }
   }
 
-  printf("\nEstos son las %d etiquetas mas cercanas para (%hhu %hhu %hhu): \n", K, predict->data[0], predict->data[1], predict->data[2]);
+  printf("\nEstos son las %d etiquetas mas cercanas para (%hd %hd %hd): \n", K, predict->data[0], predict->data[1], predict->data[2]);
   for(i=0; i<K; i++){
     printf("%u %hhu\n", may[i].distance, may[i].id);
   }
 
   JEF jefe_final = get_boss();
   if(jefe_final.cont != 0){
-    printf("%u votos ||  id: %i\n", jefe_final.cont, jefe_final.id);
+    printf("%u votos ||  id: %hhu\n", jefe_final.cont, jefe_final.id);
   }
   else{
-      printf("\nNo se pudo determinar la prediccion");
+    printf("\nNo se pudo determinar la prediccion");
   }
 
 }
 
 int main(int argc, char *argv[]) {
 	p = calloc(1, sizeof(POINT));
-	may = (MAY *) calloc(K, sizeof(MAY));
 	unsigned short i=1,j;
 
 	FILE *data = fopen("final_data_colors.csv", "r");
