@@ -10,7 +10,7 @@ SERVER_CURRENT_VERSION = os.environ.get('SERVER_CURRENT_VERSION', '1.9') # Defau
 # This is the URL where the ESP32 should download the latest CSV file if needed
 # !! IMPORTANT: Replace this with the actual public URL where your CSV file is hosted !!
 # This could be served by Nginx, Apache, or even a separate Flask endpoint
-CSV_DOWNLOAD_URL = os.environ.get('CSV_DOWNLOAD_URL', 'http://your_vps_ip_or_domain:your_csv_port/data/latest.csv')
+CSV_DOWNLOAD_URL = os.environ.get('CSV_DOWNLOAD_URL', 'http://http://168.231.68.187:7000/data/latest.csv')
 
 # --- Endpoint for Version Check ---
 @app.route('/get-version', methods=['GET'])
