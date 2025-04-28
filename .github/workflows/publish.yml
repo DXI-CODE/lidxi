@@ -1,4 +1,4 @@
-name: Update Lidxi System
+name: Update Lidxi Server
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    name: Actualización del Sistema Lidxi
+    name: Actualización del Servidor Lidxi
     runs-on: ubuntu-latest
     steps:
       - name: 1- Checkout del repositorio
