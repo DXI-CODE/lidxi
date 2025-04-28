@@ -2,8 +2,7 @@ from flask import Flask, request, jsonify
 import os
 
 app = Flask(__name__)
-
-# --- Configuration ---
+# Config
 # This is the version that the server considers current
 SERVER_CURRENT_VERSION = os.environ.get('SERVER_CURRENT_VERSION', '1.9') # Default to 1.9
 
