@@ -17,7 +17,7 @@ EXPOSE 7000
 # Set environment variables for configuration (Optional but Recommended)
 # You can also pass these during docker run or in docker-compose
 ENV SERVER_CURRENT_VERSION="1.9"
-ENV CSV_DOWNLOAD_URL="http://your_vps_ip_or_domain:your_csv_port/data/latest.csv" # !! Update this !!
+ENV CSV_DOWNLOAD_URL="http://http://168.231.68.187:7000/data/latest.csv"
 
 # Command to run the application using Gunicorn
 # -w: number of worker processes (adjust based on your VPS resources)
