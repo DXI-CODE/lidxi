@@ -1,3 +1,1 @@
-Flask
-gunicorn
-flask-cors
+Flask==2.1.2
