@@ -5,7 +5,7 @@ app = Flask(__name__)
 # Define tu versión del servidor
 SERVER_VERSION = "1.0.0"
 
-@app.route('/get-version', methods=['GET'])
+@app.route('/get-version', methods=['POST'])
 def get_version():
     client_data = request.get_json()
     if not client_data or "version" not in client_data:
