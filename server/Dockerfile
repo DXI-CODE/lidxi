@@ -1,26 +1,19 @@
-# Use a lightweight Python image
-FROM python:3.9-slim
+# Imagen base
+FROM python:3.11-slim
 
-# Set the working directory inside the container
+# Establece directorio de trabajo
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
+# Copia los archivos necesarios
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code
 COPY app.py .
+# Asegúrate de copiar también el directorio data si lo tienes ya
+COPY data/ /data/
 
-# Expose the port the app will listen on (port 7000 as requested)
+# Exponer puerto
 EXPOSE 7000
 
-# Set environment variables for configuration (Optional but Recommended)
-# You can also pass these during docker run or in docker-compose
-ENV SERVER_CURRENT_VERSION="1.9"
-ENV CSV_DOWNLOAD_URL="http://http://168.231.68.187:7000/data/latest.csv"
-
-# Command to run the application using Gunicorn
-# -w: number of worker processes (adjust based on your VPS resources)
-# -b: bind address and port
-# app:app: points to the Flask application instance named 'app' inside the 'app.py' module
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:7000", "app:app"]
+# Comando para correr la app
+CMD ["python", "app.py"]
