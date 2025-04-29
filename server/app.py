@@ -1,23 +1,25 @@
 from flask import Flask, request, send_file, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # <-- habilita CORS para todas las rutas
 
-# Define tu versión del servidor
-SERVER_VERSION = "1.0.0"
-
-@app.route('/get-version', methods=['POST'])
+# endpoint para recibir la versión del cliente
+@app.route("/get-version", methods=["POST"])
 def get_version():
-    client_data = request.get_json()
-    if not client_data or "version" not in client_data:
-        return jsonify({"error": "Missing 'version' in request body"}), 400
+    client_version = request.json.get('version')
+    print(f"Received version from ESP32: {client_version}")
 
-    client_version = client_data["version"]
+    server_version = "1.9"
+    print(f"Server current version: {server_version}")
 
-    if client_version == SERVER_VERSION:
-        return jsonify({"status": "ok"}), 200
-    else:
-        # Envía el archivo CSV si no coincide
-        return send_file('/data/latest.csv', as_attachment=True)
+    if not client_version:
+        return jsonify({"error": "Missing 'version' parameter."}), 400
+
+    if client_version != server_version:
+        return send_file("/data/latest.csv", as_attachment=True)
+
+    return jsonify({"status": "ok"})
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=7000)
