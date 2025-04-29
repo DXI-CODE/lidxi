@@ -1,3 +1,4 @@
 index.html
 server/app.py
 test.js
+.github/workflows/publish.yml

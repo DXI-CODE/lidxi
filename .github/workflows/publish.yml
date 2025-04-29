@@ -22,7 +22,7 @@ jobs:
           script: |
             cd /root/lidxi
             git pull origin main
-            docker restart lidxi-app
+            docker restart lidxi-server
 
       - name: 3- Notificar en Discord
         env:

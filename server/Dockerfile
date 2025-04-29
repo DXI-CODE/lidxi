@@ -7,8 +7,6 @@ WORKDIR /app
 # Copia el archivo requirements.txt y luego instala las dependencias
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Copia el archivo app.py al contenedor
 COPY app.py .
 
 # Crea la carpeta /data y copia el archivo CSV al contenedor
