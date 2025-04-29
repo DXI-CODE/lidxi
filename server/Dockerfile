@@ -9,8 +9,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
-# Asegúrate de copiar también el directorio data si lo tienes ya
-COPY data/ /data/
+RUN mkdir -p /data
+COPY latest.csv /data/latest.csv
+
 
 # Exponer puerto
 EXPOSE 7000
