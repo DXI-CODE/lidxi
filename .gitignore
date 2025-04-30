@@ -2,3 +2,5 @@ index.html
 server/app.py
 test.js
 .github/workflows/publish.yml
+*.json
+get_csv_c/respuesta.csv
