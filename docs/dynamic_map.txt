@@ -1,10 +1,19 @@
 @startmindmap
-* Comunicación no verbal (Variable central)
-** Lenguaje de señas (Variable primaria)
-*** Lenguaje de señas mexicano (LSM)
-*** Señales motrices
-** Guante inteligente (Variable secundaria)
-*** Interpretación de señas
-*** Reproducción de sonido
-*** Algoritmo de predicción
+* Falta de comunicación inclusiva para personas no verbales
+** Ausencia de dispositivos accesibles y asequibles
+*** Costo elevado de tecnología wearable
+*** Producción limitada de dispositivos inclusivos
+*** Falta de apoyo gubernamental
+** Limitado conocimiento social sobre LSM
+*** Escasa inclusión en la educación básica
+*** Falta de campañas de sensibilización
+*** Prejuicios hacia personas no verbales
+** Falta de integración tecnológica en contextos sociales
+*** Escuelas sin infraestructura adaptada
+*** Centros de salud sin soluciones inclusivas
+*** Poca inversión en tecnología accesible
+** Escasa investigación en IA aplicada a comunicación no verbal
+*** Falta de bases de datos públicas de LSM
+*** Requiere modelos entrenados con señales reales
+*** Carencia de proyectos abiertos para entrenamiento colaborativo
 @endmindmap
