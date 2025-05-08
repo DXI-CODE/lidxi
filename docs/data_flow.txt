@@ -1,0 +1,13 @@
+@startuml
+actor Usuario
+
+Usuario -> "Guante Inteligente" : Realiza seña
+"Guante Inteligente" -> "Sensores (Flex + MPU)" : Captura datos
+"Sensores (Flex + MPU)" -> "Arduino" : Envío de datos
+"Arduino" -> "KNN en C" : Envía datos procesados
+"KNN en C" -> "Identificador de palabra" : Predice seña
+"Identificador de palabra" -> "Módulo MP3" : Envía palabra
+"Módulo MP3" -> "Bocina Bluetooth" : Reproduce audio
+"Arduino" --> "Servidor Flask (VPS)" : Solicita actualización CSV (opcional)
+"Servidor Flask (VPS)" --> "Arduino" : Envía nuevo CSV
+@enduml

@@ -1,0 +1,10 @@
+@startmindmap
+* Comunicación no verbal (Variable central)
+** Lenguaje de señas (Variable primaria)
+*** Lenguaje de señas mexicano (LSM)
+*** Señales motrices
+** Guante inteligente (Variable secundaria)
+*** Interpretación de señas
+*** Reproducción de sonido
+*** Algoritmo de predicción
+@endmindmap
