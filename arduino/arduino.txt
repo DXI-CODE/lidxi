@@ -1,42 +1,70 @@
 #include <Arduino.h>
+#include "I2Cdev.h"
+#include "MPU6050.h"
+#include "Wire.h"
 
-#define SENSOR_PIN0 A0
-#define SENSOR_PIN1 A1
-#define SENSOR_PIN2 A2
-#define SENSOR_PIN3 A3
-#define SENSOR_PIN4 A4
+#define SENSOR_PIN0 A1
+#define SENSOR_PIN1 A2
+#define SENSOR_PIN2 A3
+#define SENSOR_PIN3 A4
+#define SENSOR_PIN4 A5
 
 #define CAPTURAR_PIN 2
+MPU6050 sensor(0x68);
+int16_t gx, gy, gz;
+
+// Escala para convertir los valores raw a unidades físicas (°/s)
+const int gyroScale = 131;  // Para ±250°/s
 
 void setup() {
     Serial.begin(9600);
 
+    //Sensore FLEX
     pinMode(SENSOR_PIN0, INPUT);
     pinMode(SENSOR_PIN1, INPUT);
     pinMode(SENSOR_PIN2, INPUT);
     pinMode(SENSOR_PIN3, INPUT);
     pinMode(SENSOR_PIN4, INPUT);
     pinMode(CAPTURAR_PIN, INPUT_PULLUP);
+
+    //SENSORES GIROSCOPIO
+    Wire.begin();         // Iniciar comunicación I2C
+    sensor.initialize();
+    sensor.setSleepEnabled(false);
+
+    if (sensor.testConnection()) {
+      Serial.println("Sensor iniciado correctamente");
+    } else {
+      Serial.println("Error al iniciar el sensor");
+      while (1); 
+    }
 }
 
 void loop() {
-    if (digitalRead(CAPTURAR_PIN) == HIGH) {
+    if (digitalRead(CAPTURAR_PIN) == HIGH) { //Se preciona y se activa el sensor, si se presiona otra vez se apaga el sensor. En caso de solo querer el dato al momento cambiar a LOW.
+        //sensonres flex
         int s0 = analogRead(SENSOR_PIN0);
         int s1 = analogRead(SENSOR_PIN1);
         int s2 = analogRead(SENSOR_PIN2);
         int s3 = analogRead(SENSOR_PIN3);
         int s4 = analogRead(SENSOR_PIN4);
 
-        Serial.print(s0);
-        Serial.print(",");
-        Serial.print(s1);
-        Serial.print(",");
-        Serial.print(s2);
-        Serial.print(",");
-        Serial.print(s3);
-        Serial.print(",");
-        Serial.println(s4); 
 
-        delay(1); 
+        //sensor giroscopio
+        sensor.getRotation(&gx, &gy, &gz);
+        short int gx = (gx / gyroScale) * 100;
+        short int gy = (gy / gyroScale) * 100;
+        short int gz = (gz / gyroScale) * 100;
+
+        Serial.print(s0); Serial.print(",");
+        Serial.print(s1); Serial.print(",");
+        Serial.print(s2); Serial.print(",");
+        Serial.print(s3); Serial.print(",");
+        Serial.print(s4); Serial.print(",");
+        Serial.print(gx); Serial.print(",");
+        Serial.print(gy); Serial.print(",");
+        Serial.println(gz);
+
+        delay(500); 
     }
 }

@@ -18,14 +18,15 @@ try:
 
         # Si el archivo es nuevo, escribir los encabezados
         if not existe_archivo:
-            writer.writerow(["Sensor1", "Sensor2", "Sensor3", "Sensor4", "Sensor5"])
+            writer.writerow(["Sensor1", "Sensor2", "Sensor3", "Sensor4", "Sensor5", "GiroX", "GiroY", "GiroZ"])
+
 
         # Leer datos del Arduino y agregarlos al CSV
         while True:
             data = ser.readline().decode().strip()  # Leer línea y decodificar
             if data:
                 valores = data.split(",")  # Separar valores por ","
-                if len(valores) == 5:  # Asegurar que sean 5 valores (según tu Arduino)
+                if len(valores) == 8:  # Asegurar que sean 5 valores (según tu Arduino)
                     print("Datos recibidos:", valores)
                     writer.writerow(valores)  # Agregar al CSV
                     archivo.flush()  # Forzar escritura en disco
