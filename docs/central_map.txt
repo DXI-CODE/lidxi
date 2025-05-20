@@ -1,0 +1,19 @@
+@startmindmap
+* Inclusión de personas no verbales
+** Comunicación en tiempo real
+*** Lenguaje de señas mexicano (LSM)
+*** Guante inteligente
+**** Sensores flex
+**** Sensor MPU
+**** Arduino
+*** Sonido
+**** Reproductor MP3
+**** Bocina Bluetooth
+** Tecnología de asistencia
+*** Procesamiento en tiempo real
+**** Algoritmo KNN
+**** Archivo CSV
+*** Conectividad híbrida
+**** Flask + VPS
+**** Docker
+@endmindmap

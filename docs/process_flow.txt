@@ -1,0 +1,18 @@
+@startuml
+start
+:Encender guante;
+:Capturar datos de sensores;
+:Enviar datos al algoritmo KNN;
+:Predecir palabra;
+if (¿Palabra encontrada?) then (sí)
+  :Enviar a módulo MP3;
+  :Reproducir audio en bocina;
+else (no)
+  :Notificar error;
+endif
+if (¿Hay conexión al servidor?) then (sí)
+  :Solicitar archivo CSV;
+  :Actualizar base de datos local;
+endif
+stop
+@enduml
