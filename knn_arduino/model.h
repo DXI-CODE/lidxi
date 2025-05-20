@@ -2,10 +2,12 @@
 #include "class_knn.h"
 #include "array_functions.h"
 #include "merge.h"
+#include <cstdint>
+#include <stdint.h>
 
-unsigned int lineas = 0;
+uint8_t lineas = 0;
 
-unsigned int calculate_distance(POINT *p1, POINT *p2, unsigned int *distance){
+uint16_t calculate_distance(POINT *p1, POINT *p2, uint16_t *distance){
 	unsigned char i = 0;
 	for(i=0; i < N; i++)
 		*distance = (*distance) + abs(p2->data[i] - p1->data[i]);
@@ -13,7 +15,7 @@ unsigned int calculate_distance(POINT *p1, POINT *p2, unsigned int *distance){
 }
 
 void change_boss(MAY *new_boss){
-  unsigned char i = 0, may_index = 0;
+  uint8_t i = 0, may_index = 0;
   MAY mayor_item;
   mayor_item.distance = may[0].distance;
   mayor_item.id = may[0].id;
@@ -30,8 +32,8 @@ void change_boss(MAY *new_boss){
 
 
 JEF get_boss(){ //Obtener la clasificación
-    unsigned int cont_jc = 0, i;
-    short pos = 0;
+    uint8_t cont_jc = 0, i;
+    int8_t pos = 0;
     JEF jef[K], boss;
 
     boss.cont = 0;
@@ -56,9 +58,9 @@ JEF get_boss(){ //Obtener la clasificación
 }
 
 void predecir(POINT *predict){
-  unsigned int i=0,j=0,k=0;
+  uint8_t i=0,j=0,k=0;
   MAY may_temp;
-  unsigned int distance_item = 0;
+  uint16_t distance_item = 0;
 
 
   for(i=0; i<K; i++){ //Aqui calculamos K distancias, seran las mas cortas por defecto
@@ -85,6 +87,6 @@ void predecir(POINT *predict){
 
   JEF jefe_final = get_boss();
   if(jefe_final.cont != 0){
-    printf("%u votos ||  id: %hhu\n", jefe_final.cont, jefe_final.id);
+    Serial.println("%u votos ||  id: %hhu\n", jefe_final.cont, jefe_final.id);
   }
 }
