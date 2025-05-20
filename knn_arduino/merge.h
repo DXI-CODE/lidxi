@@ -1,12 +1,11 @@
 #pragma once
 #include "class_knn.h"
-#include <stdio.h>
 #include <stdlib.h>
 
-void merge(JEF *arr, short left, short mid, short right) {
-    short i, j, k;
-    short n1 = mid - left + 1;
-    short n2 = right - mid;
+void merge(JEF *arr, int8_t left, int8_t mid, int8_t right) {
+    int8_t i, j, k;
+    int8_t n1 = mid - left + 1;
+    int8_t n2 = right - mid;
 
     JEF *L = (JEF *) malloc(n1 * sizeof(JEF));
     JEF *R = (JEF *) malloc(n2 * sizeof(JEF));
@@ -36,7 +35,7 @@ void merge(JEF *arr, short left, short mid, short right) {
     free(R);
 }
 
-void merge_sort(JEF *arr, short left, short right) {
+void merge_sort(JEF *arr, int8_t left, int8_t right) {
     if (left < right) {
         int mid = left + (right - left) / 2;
         merge_sort(arr, left, mid);

@@ -1,12 +1,10 @@
-#include <stdio.h>
+#include <SD.h>
+#include <SPI.h>
 #include <stdlib.h>
 #include <strings.h>
-#include <unistd.h>
 
 /*Library for KNN */
 #include "class_knn.h"
-#include "merge.h"
-#include "array_functions.h"
 #include "model.h"
 
 int main(int argc, char *argv[]) {

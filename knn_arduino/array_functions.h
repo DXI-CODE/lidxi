@@ -1,7 +1,6 @@
 #pragma once
 #include "class_knn.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 void put_in_array(JEF *jef_i, unsigned char id_candidato){
     jef_i->cont = 1;
@@ -25,20 +24,11 @@ short is_in_array(JEF *jef, unsigned char id, unsigned int arr_size){
     return -1;
 }
 
-void printf_may(){
-    unsigned int i;
-    printf("\nmay: ");
-    for(i=0; i < K; i++){
-        printf("(dist: %d : id: %d), ", may[i].distance, may[i].id);
-    }
-    printf("\n");
-}
-
 void printf_boss(JEF *jef, unsigned int tam){
     unsigned int i;
-    printf("\nboss: ");
+    Serial.println("boss: ");
     for(i=0; i < tam; i++){
-        printf("(cont: %u : id: %hhu), ", jef[i].cont, jef[i].id);
+        Serial.println("(cont: %u : id: %hhu), ", jef[i].cont, jef[i].id);
     }
-    printf("\n");
+    Serial.println("");
 }
